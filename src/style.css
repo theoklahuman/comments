@@ -1,0 +1,72 @@
+body {
+    margin: 0;
+    background: hsl(228, 33%, 97%);
+}
+
+.main-comment {
+    background: hsl(0, 0%, 100%);
+    margin: 1.5rem 0.3rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.comment-heading {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+img {
+    width: 2rem;
+    height: 2rem;
+}
+
+h5 {
+    font-weight: 700;
+}
+
+h6 {
+    color: hsl(211, 10%, 45%);
+}
+
+p {
+    color: hsl(211, 10%, 45%);
+}
+
+.comment-footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.likes-section {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    /* background: red; */
+    height: 16px;
+}
+
+.plus-sign {
+    width: 10px;
+    height: 6px;
+}
+
+.likes-number {
+    color: hsl(238, 40%, 52%);
+}
+
+.minus-sign {
+    height: 2px;
+    width: 10px;
+}
+/* .reply-section,
+.comment-footer {
+    display: flex;
+} */
+
+
+
+.main-reply {
+    margin: 3rem;
+}
