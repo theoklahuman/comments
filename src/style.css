@@ -1,11 +1,23 @@
+@font-face {
+    font-family: rubik;
+    src: url("../src/Rubik/static/Rubik-Regular.ttf");
+}
+
+* {
+    font-family: rubik;
+    box-sizing: border-box;
+}
+
 body {
-    margin: 0;
+    margin: 2rem 0 0 0;
     background: hsl(228, 33%, 97%);
 }
 
-.main-comment {
+.main-comment,
+.main-reply,
+.text-area-container {
     background: hsl(0, 0%, 100%);
-    margin: 1.5rem 0.3rem;
+    margin: 0.7rem 0.5rem;
     padding: 0.5rem;
     border-radius: 0.5rem;
 }
@@ -26,10 +38,7 @@ h5 {
     font-weight: 700;
 }
 
-h6 {
-    color: hsl(211, 10%, 45%);
-}
-
+h6,
 p {
     color: hsl(211, 10%, 45%);
 }
@@ -37,14 +46,19 @@ p {
 .comment-footer {
     display: flex;
     justify-content: space-between;
+    align-content: center;
+    padding: 2px;
 }
 
 .likes-section {
     display: flex;
+    width: 60px;
+    height: 24px;
+    padding-left: 12px;
     align-items: center;
-    gap: 2px;
-    /* background: red; */
-    height: 16px;
+    border-radius: 6px;
+    gap: 8px;
+    background: hsl(228, 33%, 97%);
 }
 
 .plus-sign {
@@ -60,13 +74,64 @@ p {
     height: 2px;
     width: 10px;
 }
-/* .reply-section,
-.comment-footer {
+.reply-section,
+.delete-section,
+.edit-section {
     display: flex;
-} */
+    gap: 4px;
+}
 
+.reply-icon,
+.delete-icon,
+.edit-icon {
+    width: 16px;
+    height: 16px;
+}
 
+.reply-text,
+.edit-text {
+    color:hsl(238, 40%, 52%);
+}
+
+.delete-text {
+    color: hsl(358, 79%, 66%);
+}
 
 .main-reply {
-    margin: 3rem;
+    margin-left: 2rem;
+}
+
+.edit-and-delete__container {
+    display: flex;
+    gap: 16px;
+}
+
+.text-area-container {
+    flex-direction: column;
+    padding-left: 1.5rem;
+}
+
+textarea {
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid hsl(228, 33%, 97%);
+    color: hsl(211, 10%, 45%)
+}
+
+.avatar-and-send__container {
+    margin-top: 1rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.action-button {
+    background: hsl(238, 40%, 52%);
+    color: hsl(0, 0%, 100%);
+    border: none;
+    border-radius: 0.5rem;
+    width: 25%;
+    padding: 0.5rem;
 }
