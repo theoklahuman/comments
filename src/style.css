@@ -135,3 +135,7 @@ textarea {
     width: 25%;
     padding: 0.5rem;
 }
+
+.mentioned-user {
+    color: hsl(238, 40%, 52%);
+}
