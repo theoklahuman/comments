@@ -1,21 +1,24 @@
 import Data from "./data.json";
 import "./style.css";
-// import showMe from "./test";
 import plusIcon from "./images/icon-plus.svg";
 import minusIcon from "./images/icon-minus.svg";
 import replyIconSvg from "./images/icon-reply.svg";
-import defaultAvatar from "./images/avatars/image-amyrobson.png";
+import editIconSvg from "./images/icon-edit.svg";
+import amyAvatar from "./images/avatars/image-amyrobson.png";
+import juliusAvatar from "./images/avatars/image-juliusomo.png";
+import maxAvatar from "./images/avatars/image-maxblagun.png";
+import ramsesAvatar from "./images/avatars/image-ramsesmiron.png";
 
-// showMe();
+const avatarArray = [amyAvatar, maxAvatar, juliusAvatar, ramsesAvatar];
+let index = 0;
 
 class CommentCard {
-  constructor(user = "") {
+  constructor(user = "", message, avatar, createdTime, numberOfLikes) {
     this.user = user;
-    this.message =
-      "Impressive! Though it seems the drag feature could be improved. But overall it looks incredible. You've nailed the design and the responsiveness at various breakpoints works really well.";
-    this.avatar = defaultAvatar;
-    this.createdTime = "1 month ago";
-    this.numberOfLikes = "";
+    this.message = message;
+    this.avatar = avatar;
+    this.createdTime = createdTime;
+    this.numberOfLikes = numberOfLikes;
   }
   createNewCard() {
     const element = document.createElement("div");
@@ -40,7 +43,7 @@ class CommentCard {
     plusSign.className = "plus-sign";
     const likesCount = document.createElement("div");
     likesCount.className = "likes-number";
-    likesCount.textContent = "12";
+    likesCount.textContent = this.numberOfLikes;
     const minusSign = document.createElement("img");
     minusSign.src = minusIcon;
     minusSign.className = "minus-sign";
@@ -66,15 +69,44 @@ class CommentCard {
     element.appendChild(commentHeadingElement);
     element.appendChild(commentText);
     element.appendChild(commentFooter);
-
     return element;
   }
 }
 
-const testCard = new CommentCard("amyrobson");
+class TextField {
+  constructor(user = "") {
+    this.user = user;
+  }
+  createInput() {
+    const textAreaContainer = document.createElement("div");
+    textAreaContainer.className = "text-area-container";
+    const textArea = document.createElement("textarea");
+    const avatarAndSendContainer = document.createElement("div");
+    avatarAndSendContainer.className = "avatar-and-send__container";
+    const userAvater = document.createElement("img");
+    userAvater.src = juliusAvatar;
+    const textAreaActionButton = document.createElement("button");
+    textAreaActionButton.className = "action-button";
+    textAreaActionButton.textContent = "Send";
+    textArea.textContent = "Add a Comment";
+    avatarAndSendContainer.appendChild(userAvater);
+    avatarAndSendContainer.appendChild(textAreaActionButton);
+    textAreaContainer.appendChild(textArea);
+    textAreaContainer.appendChild(avatarAndSendContainer);
+    return textAreaContainer;
+  }
+}
+const testTextField = new TextField("juliusomo");
 
-document.body.appendChild(testCard.createNewCard());
-document.body.appendChild(testCard.createNewCard());
-document.body.appendChild(testCard.createNewCard());
-document.body.appendChild(testCard.createNewCard());
-document.body.appendChild(testCard.createNewCard());
+for (const comments of Data.comments) {
+    const newCard = new CommentCard(
+        comments.user.username,
+        comments.content,
+        avatarArray[index],
+        comments.createdAt,
+        comments.score
+      );
+      index++;
+      document.body.appendChild(newCard.createNewCard());
+}
+document.body.appendChild(testTextField.createInput());
