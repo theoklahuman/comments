@@ -9,16 +9,34 @@ import juliusAvatar from "./images/avatars/image-juliusomo.png";
 import maxAvatar from "./images/avatars/image-maxblagun.png";
 import ramsesAvatar from "./images/avatars/image-ramsesmiron.png";
 
+// const dataToBeUsed = Data;
+
+// // const ImgElement = document.createElement("img");
+// // ImgElement.src = sampleImg;
+// // document.body.appendChild(ImgElement);
+
+// console.log(
+//   dataToBeUsed.currentUser.image.png === "./images/avatars/image-juliusomo.png"
+// );
+
 const avatarArray = [amyAvatar, maxAvatar, juliusAvatar, ramsesAvatar];
 let index = 0;
 
 class CommentCard {
-  constructor(user = "", message, avatar, createdTime, numberOfLikes) {
+  constructor(
+    user = "",
+    message,
+    avatar,
+    createdTime,
+    numberOfLikes,
+    replying
+  ) {
     this.user = user;
     this.message = message;
     this.avatar = avatar;
     this.createdTime = createdTime;
     this.numberOfLikes = numberOfLikes;
+    this.replying = replying;
   }
   createNewCard() {
     const element = document.createElement("div");
@@ -71,6 +89,12 @@ class CommentCard {
     element.appendChild(commentFooter);
     return element;
   }
+
+  createReplyCard() {
+    const element = this.createNewCard();
+    element.className = "main-reply";
+    return element;
+  }
 }
 
 class TextField {
@@ -99,14 +123,36 @@ class TextField {
 const testTextField = new TextField("juliusomo");
 
 for (const comments of Data.comments) {
+  if (comments.replies.length === 0) {
     const newCard = new CommentCard(
-        comments.user.username,
-        comments.content,
+      comments.user.username,
+      comments.content,
+      avatarArray[index],
+      comments.createdAt,
+      comments.score
+    );
+    index++;
+    document.body.appendChild(newCard.createNewCard());
+  } else {
+    const newCard = new CommentCard(
+      comments.user.username,
+      comments.content,
+      avatarArray[index],
+      comments.createdAt,
+      comments.score
+    );
+    index++;
+    document.body.appendChild(newCard.createNewCard());
+    for (const commentReplies of comments.replies) {
+      const newCard = new CommentCard(
+        commentReplies.user.username,
+        commentReplies.content,
         avatarArray[index],
-        comments.createdAt,
-        comments.score
+        commentReplies.createdAt,
+        commentReplies.score
       );
-      index++;
-      document.body.appendChild(newCard.createNewCard());
+      document.body.appendChild(newCard.createReplyCard());
+    }
+  }
 }
 document.body.appendChild(testTextField.createInput());
