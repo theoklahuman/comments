@@ -52,7 +52,7 @@ class CommentCard {
     plusSign.src = plusIcon;
     plusSign.className = "plus-sign";
     plusSign.addEventListener("click", () => {
-        console.log("I clicked the plus sign!");
+      console.log("I clicked the plus sign!");
     });
     const likesCount = document.createElement("div");
     likesCount.className = "likes-number";
@@ -61,7 +61,7 @@ class CommentCard {
     minusSign.src = minusIcon;
     minusSign.className = "minus-sign";
     minusSign.addEventListener("click", () => {
-        console.log("I clicked the minus sign!");
+      console.log("I clicked the minus sign!");
     });
     const likesSection = document.createElement("div");
     likesSection.className = "likes-section";
@@ -77,9 +77,7 @@ class CommentCard {
     replyText.id = this.id;
     replyText.pointer = "cursor";
     replyText.addEventListener("click", (event) => {
-      console.log("I did what's expected of me!");
-      console.log(`I'm about to reply to ${this.user}`);
-      console.log(element.className);
+      this.getComment(element.id);
     });
     const replySection = document.createElement("div");
     replySection.className = "reply-section";
@@ -103,8 +101,28 @@ class CommentCard {
 
   createUserCommentCard() {
     const element = this.createNewCard();
-    console.log(element[0]);
     return element;
+  }
+
+  getComment(target) {
+    for (const comments of Data.comments) {
+      if (comments.replies.length !== 0) {
+        for (const commentReplies of comments.replies) {
+          if (+target === commentReplies.id) {
+            document.querySelector(
+              "textarea"
+            ).textContent = `@${commentReplies.user.username}`;
+            return;
+          }
+        }
+      }
+      if (+target === comments.id) {
+        document.querySelector(
+          "textarea"
+        ).textContent = `@${comments.user.username}`;
+        return;
+      }
+    }
   }
 }
 
@@ -164,7 +182,6 @@ export default function buildPage() {
         comments.score,
         comments.id
       );
-      console.log(comments.id);
       document.body.appendChild(newCard.createNewCard());
     } else {
       const newCard = new CommentCard(
@@ -175,7 +192,6 @@ export default function buildPage() {
         comments.score,
         comments.id
       );
-      console.log(comments.id);
       document.body.appendChild(newCard.createNewCard());
       for (const commentReplies of comments.replies) {
         const newCard = new CommentCard(
@@ -186,7 +202,6 @@ export default function buildPage() {
           commentReplies.score,
           commentReplies.id
         );
-        console.log(commentReplies.id);
         document.body.appendChild(newCard.createReplyCard());
       }
     }
