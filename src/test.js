@@ -279,6 +279,32 @@ export class TextField {
 
 export default function buildPage() {
   document.body.innerHTML = "";
+  // if (jsonFile.comments.replies.length === 0) {
+  //   const newCard = new CommentCard(
+  //     jsonFile.comments.id,
+  //     jsonFile.comments.content,
+  //     jsonFile.comments.createdAt,
+  //     jsonFile.comments.score,
+  //     jsonFile.comments.user,
+  //     jsonFile.comments.replies,
+  //     jsonFile.comments.replyingTo
+  //   );
+  //   document.body.appendChild(newCard.createNewCard());
+  //   return;
+  // } else {
+  //   const newCard = new CommentCard(
+  //     jsonFile.comments.id,
+  //     jsonFile.comments.content,
+  //     jsonFile.comments.createdAt,
+  //     jsonFile.comments.score,
+  //     jsonFile.comments.user,
+  //     jsonFile.comments.replies,
+  //     jsonFile.comments.replyingTo
+  //   );
+  //   document.body.appendChild(newCard.createNewCard());
+  //   buildPage(jsonFile.comments[length - 1]);
+  // }
+
   for (const comments of Data.comments) {
     if (comments.replies.length === 0) {
       const newCard = new CommentCard(
