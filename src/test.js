@@ -1,34 +1,51 @@
-import Data from "./data.json";
-import "./style.css";
-import plusIcon from "./images/icon-plus.svg";
-import minusIcon from "./images/icon-minus.svg";
-import replyIconSvg from "./images/icon-reply.svg";
-import editIconSvg from "./images/icon-edit.svg";
-import amyAvatar from "./images/avatars/image-amyrobson.png";
-import juliusAvatar from "./images/avatars/image-juliusomo.png";
-import maxAvatar from "./images/avatars/image-maxblagun.png";
-import ramsesAvatar from "./images/avatars/image-ramsesmiron.png";
+import "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js";
+import infoo from "./data.json";
+import "./styles.css";
+import "../images/icon-plus.svg";
+import "../images/icon-minus.svg";
+import "../images/icon-reply.svg";
+import "../images/icon-edit.svg";
+import "../images/avatars/image-amyrobson.png";
+import "../images/avatars/image-juliusomo.png";
+import "../images/avatars/image-maxblagun.png";
+import "../images/avatars/image-ramsesmiron.png";
 
-const avatarArray = [amyAvatar, maxAvatar, ramsesAvatar, juliusAvatar];
-
-class CommentCard {
-  constructor(
-    user = "",
-    message,
-    avatar,
-    createdTime,
-    numberOfLikes,
-    id,
-    replying
-  ) {
-    this.user = user;
-    this.message = message;
-    this.avatar = avatar;
-    this.createdTime = createdTime;
-    this.numberOfLikes = numberOfLikes;
-    this.id = id;
-    this.replying = replying;
+export const Data = infoo;
+export let newestid = 0;
+for (const comment of Data.comments) {
+  if (comment.replies.length === 0) {
+    newestid += 1;
+  } else {
+    newestid += 1;
+    for (const commentReplies of comment.replies) {
+      newestid += 1;
+    }
   }
+}
+
+export class CommentCard {
+  constructor(id, content, createdAt, score, user, replies, replyingTo) {
+    this.id = id;
+    this.content = content;
+    this.createdAt = createdAt;
+    this.score = score;
+    this.user = user;
+    this.replies = replies;
+    this.replying = replyingTo;
+  }
+
+  sendInfoToJson() {
+    Data.comments.push({
+      id: this.id,
+      content: this.content,
+      createdAt: this.createdAt,
+      score: this.score,
+      user: this.user,
+      replies: this.replies,
+      replyingTo: this.replyingTo,
+    });
+  }
+
   createNewCard() {
     const element = document.createElement("div");
     element.className = "main-comment";
@@ -36,29 +53,29 @@ class CommentCard {
     const commentHeadingElement = document.createElement("div");
     commentHeadingElement.className = "comment-heading";
     const avatar = document.createElement("img");
-    avatar.src = this.avatar;
+    avatar.src = this.user.image.png;
     const h5 = document.createElement("h5");
     h5.className = "main-poster__username";
-    h5.textContent = this.user;
+    h5.textContent = this.user.username;
     const h6 = document.createElement("h6");
     h6.className = "time-posted";
-    h6.textContent = this.createdTime;
+    h6.textContent = this.createdAt;
     commentHeadingElement.appendChild(avatar);
     commentHeadingElement.appendChild(h5);
     commentHeadingElement.appendChild(h6);
     const commentText = document.createElement("p");
-    commentText.textContent = this.message;
+    commentText.textContent = this.content;
     const plusSign = document.createElement("img");
-    plusSign.src = plusIcon;
+    plusSign.src = "./images/icon-plus.svg";
     plusSign.className = "plus-sign";
     plusSign.addEventListener("click", () => {
       console.log("I clicked the plus sign!");
     });
     const likesCount = document.createElement("div");
     likesCount.className = "likes-number";
-    likesCount.textContent = this.numberOfLikes;
+    likesCount.textContent = this.score;
     const minusSign = document.createElement("img");
-    minusSign.src = minusIcon;
+    minusSign.src = "./images/icon-minus.svg";
     minusSign.className = "minus-sign";
     minusSign.addEventListener("click", () => {
       console.log("I clicked the minus sign!");
@@ -69,7 +86,7 @@ class CommentCard {
     likesSection.appendChild(likesCount);
     likesSection.appendChild(minusSign);
     const replyIcon = document.createElement("img");
-    replyIcon.src = replyIconSvg;
+    replyIcon.src = "./images/icon-reply.svg";
     replyIcon.className = "reply-icon";
     const replyText = document.createElement("div");
     replyText.textContent = "Reply";
@@ -129,6 +146,12 @@ class CommentCard {
 export class TextField {
   constructor(user = "") {
     this.user = user;
+    this.content = "";
+    this.avatar = "";
+    this.createdAt = "";
+    this.score = "";
+    this.id = "";
+    this.replying = "";
   }
   createInput() {
     const textAreaContainer = document.createElement("div");
@@ -136,15 +159,15 @@ export class TextField {
     const textArea = document.createElement("textarea");
     const avatarAndSendContainer = document.createElement("div");
     avatarAndSendContainer.className = "avatar-and-send__container";
-    const userAvater = document.createElement("img");
-    userAvater.src = juliusAvatar;
+    const userAvatar = document.createElement("img");
+    userAvatar.src = Data.currentUser.image.png;
     const textAreaActionButton = document.createElement("button");
     textAreaActionButton.type = "button";
     textAreaActionButton.className = "action-button";
     textAreaActionButton.textContent = "Send";
     textAreaActionButton.addEventListener("click", this.takeAction);
     textArea.placeholder = "Add a Comment";
-    avatarAndSendContainer.appendChild(userAvater);
+    avatarAndSendContainer.appendChild(userAvatar);
     avatarAndSendContainer.appendChild(textAreaActionButton);
     textAreaContainer.appendChild(textArea);
     textAreaContainer.appendChild(avatarAndSendContainer);
@@ -154,56 +177,78 @@ export class TextField {
   takeAction() {
     const message = document.querySelector("textarea").value;
     const newCard = new CommentCard(
-      Data.currentUser.username,
+      ++newestid,
       message,
-      avatarArray[3],
       "now",
-      0
+      0,
+      Data.currentUser,
+      [],
+      "replyingTo"
     );
+    newCard.content = message;
+    newCard.sendInfoToJson();
     const textSection = document.querySelector(".text-area-container");
-    document.body.removeChild(textSection);
-    document.body.appendChild(newCard.createUserCommentCard());
+    // document.body.removeChild(textSection);
+    // document.body.appendChild(newCard.createUserCommentCard());
+    buildPage();
     document.body.insertAdjacentElement(
       "beforeend",
       testTextField.createInput()
     );
+    console.log(Data);
   }
+
+  // sendInfoToJson(id, content, createdAt, score, user, replies) {
+  //   Data.comments.push({
+  //     "id": id,
+  //     "content": content,
+  //     "createdAt": createdAt,
+  //     "score": score,
+  //     "user": user,
+  //     "replies": replies,
+  //   });
+  // }
 }
-const testTextField = new TextField("juliusomo");
 
 export default function buildPage() {
+  document.body.innerHTML = "";
   for (const comments of Data.comments) {
     if (comments.replies.length === 0) {
       const newCard = new CommentCard(
-        comments.user.username,
+        comments.id,
         comments.content,
-        avatarArray[comments.id - 1],
         comments.createdAt,
         comments.score,
-        comments.id
+        comments.user,
+        comments.replies,
+        comments.replyingTo
       );
       document.body.appendChild(newCard.createNewCard());
     } else {
       const newCard = new CommentCard(
-        comments.user.username,
+        comments.id,
         comments.content,
-        avatarArray[comments.id - 1],
         comments.createdAt,
         comments.score,
-        comments.id
+        comments.user,
+        comments.replies,
+        comments.replyingTo
       );
       document.body.appendChild(newCard.createNewCard());
       for (const commentReplies of comments.replies) {
         const newCard = new CommentCard(
-          commentReplies.user.username,
-          commentReplies.content,
-          avatarArray[commentReplies.id - 1],
+          commentReplies.id,
+          `@${commentReplies.replyingTo} ${commentReplies.content}`,
           commentReplies.createdAt,
           commentReplies.score,
-          commentReplies.id
+          commentReplies.user,
+          commentReplies.replies,
+          commentReplies.replyingTo
         );
         document.body.appendChild(newCard.createReplyCard());
       }
     }
   }
 }
+
+const testTextField = new TextField("juliusomo");

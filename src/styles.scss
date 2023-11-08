@@ -54,7 +54,7 @@ p {
     display: flex;
     width: 60px;
     height: 24px;
-    padding-left: 12px;
+    padding: 0 10px;
     align-items: center;
     border-radius: 6px;
     gap: 8px;
@@ -139,3 +139,5 @@ textarea {
 .mentioned-user {
     color: hsl(238, 40%, 52%);
 }
+
+@import "../node_modules/bootstrap/scss/bootstrap.scss";

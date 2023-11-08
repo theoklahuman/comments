@@ -10,12 +10,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "hotshot comments"
+            title: "dynamic comments"
         })
     ],
     output: {
         filename: "main.js",
         path: path.resolve(__dirname, "dist"),
+        assetModuleFilename: "images/[name][ext]",
         clean: true,
     },
     module: {
