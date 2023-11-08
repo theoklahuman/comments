@@ -10,6 +10,7 @@ import "../images/avatars/image-juliusomo.png";
 import "../images/avatars/image-maxblagun.png";
 import "../images/avatars/image-ramsesmiron.png";
 
+let targetID = "";
 export const Data = infoo;
 export let newestid = 0;
 for (const comment of Data.comments) {
@@ -35,16 +36,64 @@ export class CommentCard {
   }
 
   sendInfoToJson() {
-    Data.comments.push({
-      id: this.id,
-      content: this.content,
-      createdAt: this.createdAt,
-      score: this.score,
-      user: this.user,
-      replies: this.replies,
-      replyingTo: this.replyingTo,
-    });
+    console.log(+targetID);
+    for (const comments of Data.comments) {
+      console.log(comments.id);
+      console.log(comments.id === +targetID);
+      if (comments.id === +targetID) {
+        console.log(Data);
+        comments.replies.push({
+          id: this.id,
+          content: this.content,
+          createdAt: this.createdAt,
+          score: this.score,
+          user: this.user,
+          replies: this.replies,
+          replyingTo: testTextField.replying,
+        });
+        console.log(Data);
+      } else {
+        for (const commentReplies of comments.replies) {
+          console.log("I got here");
+          if (commentReplies.id === +targetID) {
+            
+            if ((commentReplies.replies === null) || (commentReplies.replies === undefined)) {
+              commentReplies.replies = [];
+              console.log(Data);
+              console.log(commentReplies.replies);
+              console.log("I also got here");
+              commentReplies.replies.push({
+                id: this.id,
+                content: this.content,
+                createdAt: this.createdAt,
+                score: this.score,
+                user: this.user,
+                replies: this.replies,
+                replyingTo: testTextField.replying,
+              });
+              console.log(Data);
+            } else {
+              commentReplies.replies.push({
+                id: this.id,
+                content: this.content,
+                createdAt: this.createdAt,
+                score: this.score,
+                user: this.user,
+                replies: this.replies,
+                replyingTo: testTextField.replying,
+              });
+            }
+          }
+        }
+      }
+    };
+    console.log(Data);
+    testTextField.replying = "";
   }
+
+  // checkIfReplying() {
+  //   console.log(this.replying)
+  // }
 
   createNewCard() {
     const element = document.createElement("div");
@@ -95,6 +144,8 @@ export class CommentCard {
     replyText.pointer = "cursor";
     replyText.addEventListener("click", (event) => {
       this.getComment(element.id);
+      targetID = element.id;
+      testTextField.replying = this.getComment(element.id);
     });
     const replySection = document.createElement("div");
     replySection.className = "reply-section";
@@ -129,7 +180,8 @@ export class CommentCard {
             document.querySelector(
               "textarea"
             ).textContent = `@${commentReplies.user.username}`;
-            return;
+            const replyingTo = commentReplies.user.username;
+            return replyingTo;
           }
         }
       }
@@ -137,7 +189,31 @@ export class CommentCard {
         document.querySelector(
           "textarea"
         ).textContent = `@${comments.user.username}`;
-        return;
+        const replyingTo = comments.user.username;
+        return replyingTo;
+      }
+    }
+  }
+
+  getCommentID(target) {
+    for (const comments of Data.comments) {
+      if (comments.replies.length !== 0) {
+        for (const commentReplies of comments.replies) {
+          if (+target === commentReplies.id) {
+            document.querySelector(
+              "textarea"
+            ).textContent = `@${commentReplies.user.username}`;
+            const commentID = commentReplies.id;
+            return commentID;
+          }
+        }
+      }
+      if (+target === comments.id) {
+        document.querySelector(
+          "textarea"
+        ).textContent = `@${comments.user.username}`;
+        const commentID = comments.id;
+        return commentID;
       }
     }
   }
@@ -183,10 +259,13 @@ export class TextField {
       0,
       Data.currentUser,
       [],
-      "replyingTo"
+      this.replying
     );
+    console.log(message);
     newCard.content = message;
     newCard.sendInfoToJson();
+    newCard.replyingTo = newCard.getComment();
+    // newCard.checkIfReplying();
     const textSection = document.querySelector(".text-area-container");
     // document.body.removeChild(textSection);
     // document.body.appendChild(newCard.createUserCommentCard());
@@ -195,19 +274,7 @@ export class TextField {
       "beforeend",
       testTextField.createInput()
     );
-    console.log(Data);
   }
-
-  // sendInfoToJson(id, content, createdAt, score, user, replies) {
-  //   Data.comments.push({
-  //     "id": id,
-  //     "content": content,
-  //     "createdAt": createdAt,
-  //     "score": score,
-  //     "user": user,
-  //     "replies": replies,
-  //   });
-  // }
 }
 
 export default function buildPage() {
